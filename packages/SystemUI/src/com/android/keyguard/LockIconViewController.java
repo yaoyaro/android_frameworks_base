@@ -310,25 +310,14 @@ public class LockIconViewController extends ViewController<LockIconView> impleme
             return;
         }
 
-        boolean wasShowingFpIcon = mUdfpsEnrolled && !mShowUnlockIcon && !mShowLockIcon
+        boolean wasShowingFpIcon = mUdfpsEnrolled && !mShowUnlockIcon
                 && !mShowAodUnlockedIcon && !mShowAodLockIcon;
-        mShowLockIcon = !mCanDismissLockScreen && isLockScreen()
-                && (!mUdfpsEnrolled || !mRunningFPS);
-        mShowUnlockIcon = mCanDismissLockScreen && isLockScreen();
+        mShowUnlockIcon = mCanDismissLockScreen && isLockScreen() && mUdfpsEnrolled;
         mShowAodUnlockedIcon = mIsDozing && mUdfpsEnrolled && !mRunningFPS && mCanDismissLockScreen;
         mShowAodLockIcon = mIsDozing && mUdfpsEnrolled && !mRunningFPS && !mCanDismissLockScreen;
 
         final CharSequence prevContentDescription = mView.getContentDescription();
-        if (mShowLockIcon) {
-            if (wasShowingFpIcon) {
-                // fp icon was shown by UdfpsView, and now we still want to animate the transition
-                // in this drawable
-                mView.updateIcon(ICON_FINGERPRINT, false);
-            }
-            mView.updateIcon(ICON_LOCK, false);
-            mView.setContentDescription(mLockedLabel);
-            mView.setVisibility(View.VISIBLE);
-        } else if (mShowUnlockIcon) {
+        if (mShowUnlockIcon) {
             if (wasShowingFpIcon) {
                 // fp icon was shown by UdfpsView, and now we still want to animate the transition
                 // in this drawable
