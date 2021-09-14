@@ -28,4 +28,7 @@
 
     <!-- Whether to enable HEVC toggle for screenrecord -->
     <bool name="config_screenRecordHEVC">true</bool>
+
+    <!-- Whether to show refresh rate QS tile -->
+    <bool name="config_showRefreshRateQsTile">false</bool>
 </resources>
