@@ -671,6 +671,7 @@ public class QSPanel extends LinearLayout {
                 updateColumns();
             }
             updateMargins(mediaHostView);
+            if (mHorizontalLinearLayout == null) return;
             mHorizontalLinearLayout.setVisibility(horizontal ? View.VISIBLE : View.GONE);
         }
     }
