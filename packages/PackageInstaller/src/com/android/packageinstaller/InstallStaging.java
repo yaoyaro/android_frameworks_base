@@ -48,11 +48,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import ink.kscope.packageinstaller.activity.BasePackageInstallerActivity;
+
 /**
  * If a package gets installed from a content URI this step stages the installation session
  * reading bytes from the URI.
  */
-public class InstallStaging extends AlertActivity {
+public class InstallStaging extends BasePackageInstallerActivity {
     private static final String LOG_TAG = InstallStaging.class.getSimpleName();
 
     private static final String STAGED_SESSION_ID = "STAGED_SESSION_ID";
@@ -72,21 +74,20 @@ public class InstallStaging extends AlertActivity {
         mInstaller = getPackageManager().getPackageInstaller();
 
         setFinishOnTouchOutside(true);
-        mAlert.setIcon(R.drawable.ic_file_download);
-        mAlert.setTitle(getString(R.string.app_name_unknown));
-        mAlert.setView(R.layout.install_content_view);
-        mAlert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel),
-                (ignored, ignored2) -> {
-                    if (mStagingTask != null) {
-                        mStagingTask.cancel(true);
-                    }
+        hideInstallBtn();
+        mAppIconView.setImageResource(R.drawable.ic_file_download);
+        mAppLabelView.setText(R.string.app_name_unknown);
+        mCancelBtn.setText(R.string.cancel);
+        mCancelBtn.setOnClickListener(view -> {
+            if (mStagingTask != null) {
+                mStagingTask.cancel(true);
+            }
 
-                    cleanupStagingSession();
+            cleanupStagingSession();
 
-                    setResult(RESULT_CANCELED);
-                    finish();
-                }, null);
-        setupAlert();
+            setResult(RESULT_CANCELED);
+            finish();
+        });
         requireViewById(R.id.staging).setVisibility(View.VISIBLE);
 
         if (savedInstanceState != null) {

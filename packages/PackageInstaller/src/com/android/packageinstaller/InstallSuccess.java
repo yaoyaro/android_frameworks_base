@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,10 +32,12 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
+import ink.kscope.packageinstaller.activity.BasePackageInstallerActivity;
+
 /**
  * Finish installation: Return status code to the caller or display "success" UI to user
  */
-public class InstallSuccess extends AlertActivity {
+public class InstallSuccess extends BasePackageInstallerActivity {
     private static final String LOG_TAG = InstallSuccess.class.getSimpleName();
 
     @Nullable
@@ -83,20 +86,20 @@ public class InstallSuccess extends AlertActivity {
             return;
         }
 
-        mAlert.setIcon(mAppSnippet.icon);
-        mAlert.setTitle(mAppSnippet.label);
-        mAlert.setView(R.layout.install_content_view);
-        mAlert.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.launch), null,
-                null);
-        mAlert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.done),
-                (ignored, ignored2) -> {
-                    if (mAppPackageName != null) {
-                        Log.i(LOG_TAG, "Finished installing " + mAppPackageName);
-                    }
-                    finish();
-                }, null);
-        setupAlert();
-        requireViewById(R.id.install_success).setVisibility(View.VISIBLE);
+        mAppIconView.setImageDrawable(mAppSnippet.icon);
+        mAppLabelView.setText(mAppSnippet.label);
+        mInstallBtn.setText(R.string.launch);
+        mCancelBtn.setText(R.string.done);
+        mCancelBtn.setOnClickListener(view -> {
+            if (mAppPackageName != null) {
+                Log.i(LOG_TAG, "Finished installing " + mAppPackageName);
+            }
+            finish();
+        });
+        mInstallTipView.setText(R.string.kscope_install_done);
+        mInstallStatusIconView.setImageResource(R.drawable.ic_install_done);
+        mInstallStatusIconView.setVisibility(View.VISIBLE);
+
         // Enable or disable "launch" button
         boolean enabled = false;
         if (mLaunchIntent != null) {
@@ -107,14 +110,13 @@ public class InstallSuccess extends AlertActivity {
             }
         }
 
-        Button launchButton = mAlert.getButton(DialogInterface.BUTTON_POSITIVE);
         if (enabled) {
-            launchButton.setOnClickListener(view -> {
+            mInstallBtn.setOnClickListener(view -> {
                 setResult(Activity.RESULT_OK, mLaunchIntent);
                 finish();
             });
         } else {
-            launchButton.setEnabled(false);
+            hideInstallBtn();
         }
     }
 }
