@@ -82,7 +82,7 @@
                 android:exported="false" />
 
         <activity android:name=".InstallInstalling"
-                android:theme="@style/Theme.Kscope.PackageInstaller.Main.NoAnim"
+                android:theme="@style/Theme.Kscope.PackageInstaller.Main.SlideAnim"
                 android:exported="false" />
 
         <receiver android:name=".InstallEventReceiver"
@@ -94,11 +94,11 @@
         </receiver>
 
         <activity android:name=".InstallSuccess"
-                android:theme="@style/Theme.Kscope.PackageInstaller.Main.NoAnim"
+                android:theme="@style/Theme.Kscope.PackageInstaller.Main.SlideAnim"
                 android:exported="false" />
 
         <activity android:name=".InstallFailed"
-                android:theme="@style/Theme.Kscope.PackageInstaller.Main.NoAnim"
+                android:theme="@style/Theme.Kscope.PackageInstaller.Main.SlideAnim"
                 android:exported="false" />
 
         <activity android:name=".UninstallerActivity"
