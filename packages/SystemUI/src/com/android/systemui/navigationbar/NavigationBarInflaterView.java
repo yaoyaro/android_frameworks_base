@@ -19,11 +19,13 @@ package com.android.systemui.navigationbar;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_3BUTTON;
 import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_GESTURAL;
+import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_GESTURAL_OVERLAY;
 
 import android.annotation.Nullable;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.om.IOverlayManager;
+import android.content.om.OverlayInfo;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
 import android.graphics.drawable.Icon;
@@ -54,11 +56,14 @@ import com.android.systemui.shared.system.QuickStepContract;
 
 import lineageos.providers.LineageSettings;
 
+import com.android.systemui.tuner.TunerService;
+
 import java.io.PrintWriter;
 import java.lang.ref.WeakReference;
 import java.util.Objects;
 
-public class NavigationBarInflaterView extends FrameLayout {
+public class NavigationBarInflaterView extends FrameLayout
+        implements TunerService.Tunable {
     private static final String TAG = "NavBarInflater";
 
     public static final String NAV_BAR_VIEWS = "sysui_nav_bar";
@@ -114,6 +119,9 @@ public class NavigationBarInflaterView extends FrameLayout {
 
     private final Listener mListener;
 
+    private static final String KEY_NAVIGATION_SPACE =
+            "system:" + Settings.System.NAVIGATION_BAR_IME_SPACE;
+
     protected LayoutInflater mLayoutInflater;
     protected LayoutInflater mLandscapeInflater;
 
@@ -137,6 +145,8 @@ public class NavigationBarInflaterView extends FrameLayout {
     private boolean mIsHintEnabled;
 
     private final ContentObserver mContentObserver;
+
+    private boolean mIsAttachedToWindow;
 
     public NavigationBarInflaterView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -219,13 +229,46 @@ public class NavigationBarInflaterView extends FrameLayout {
                 mContentObserver);
         mContentObserver.onChange(true, navBarInverse);
         mContentObserver.onChange(true, navigationBarHint);
+        Dependency.get(TunerService.class).addTunable(this, KEY_NAVIGATION_SPACE);
+        mIsAttachedToWindow = true;
     }
 
     @Override
     protected void onDetachedFromWindow() {
+        mIsAttachedToWindow = false;
         Dependency.get(NavigationModeController.class).removeListener(mListener);
         mContext.getContentResolver().unregisterContentObserver(mContentObserver);
         super.onDetachedFromWindow();
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        if (mIsAttachedToWindow &&
+                mNavBarMode == NAV_BAR_MODE_GESTURAL && KEY_NAVIGATION_SPACE.equals(key)) {
+            int state = TunerService.parseInteger(newValue, 0);
+            String overlay = NAV_BAR_MODE_GESTURAL_OVERLAY;
+            switch (state) {
+                case 1:  // narrow
+                    overlay += "_narrow_back";
+                    break;
+                case 2:  // hidden
+                    overlay += "_wide_back";
+            }
+
+            try {
+                int userId = ActivityManager.getCurrentUser();
+                IOverlayManager om = IOverlayManager.Stub.asInterface(
+                        ServiceManager.getService(Context.OVERLAY_SERVICE));
+                OverlayInfo info = om.getOverlayInfo(overlay, userId);
+
+                if (info != null && !info.isEnabled())
+                    om.setEnabledExclusiveInCategory(overlay, userId);
+            } catch (Exception e) {
+            }
+        }
+        if (QuickStepContract.isGesturalMode(mNavBarMode)) {
+            setNavigationBarLayout(newValue);
+        }
     }
 
     @Override
@@ -240,6 +283,13 @@ public class NavigationBarInflaterView extends FrameLayout {
         if (!Objects.equals(mCurrentLayout, newValue)) {
             clearViews();
             inflateLayout(newValue);
+        }
+    }
+
+    private void setNavigationBarLayout(String layoutValue) {
+        if (!Objects.equals(mCurrentLayout, layoutValue)) {
+            clearViews();
+            inflateLayout(layoutValue);
         }
     }
 

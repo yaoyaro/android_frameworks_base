@@ -102,5 +102,6 @@ public class SystemSettings {
         Settings.System.SCREEN_FLASH_NOTIFICATION,
         Settings.System.SCREEN_FLASH_NOTIFICATION_COLOR,
         Settings.System.NAVBAR_LONG_PRESS_GESTURE,
+        Settings.System.NAVIGATION_BAR_IME_SPACE,
     };
 }
