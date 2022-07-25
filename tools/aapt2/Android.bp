@@ -42,11 +42,13 @@ cc_defaults {
         "-Wall",
         "-Werror",
         "-Wno-unused-parameter",
+	"-O3",
     ],
     cppflags: [
         "-Wno-missing-field-initializers",
         "-fno-exceptions",
         "-fno-rtti",
+	"-O3",
     ],
     target: {
         windows: {
