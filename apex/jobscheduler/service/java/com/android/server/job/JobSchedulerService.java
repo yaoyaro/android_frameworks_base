@@ -2698,6 +2698,7 @@ public class JobSchedulerService extends com.android.server.SystemService
 
         // Remove from store as well as controllers.
         final boolean removed = mJobs.remove(jobStatus, removeFromPersisted);
+        /*
         if (!removed) {
             // We never create JobStatus objects for the express purpose of removing them, and this
             // method is only ever called for jobs that were saved in the JobStore at some point,
@@ -2709,6 +2710,7 @@ public class JobSchedulerService extends com.android.server.SystemService
             // TODO: rework code so we don't intentionally call this method twice for the same job
             Slog.w(TAG, "Job didn't exist in JobStore: " + jobStatus.toShortString());
         }
+        */
         if (mReadyToRock) {
             for (int i = 0; i < mControllers.size(); i++) {
                 StateController controller = mControllers.get(i);
