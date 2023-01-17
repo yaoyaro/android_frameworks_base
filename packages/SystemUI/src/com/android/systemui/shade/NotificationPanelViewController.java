@@ -4676,6 +4676,7 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
         public void onDozeAmountChanged(float linearAmount, float amount) {
             mInterpolatedDarkAmount = amount;
             mLinearDarkAmount = linearAmount;
+            mKeyguardStatusViewController.setDarkAmount(mInterpolatedDarkAmount);
             positionClockAndNotifications();
         }
     }
