@@ -885,6 +885,9 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
 
     public void setCustomScrimAlpha(int value) {
         mCustomScrimAlpha = (float) value / 100f;
+        for (ScrimState state : ScrimState.values()) {
+            state.setCustomScrimAlpha(mCustomScrimAlpha);
+        }
         applyState();
     }
 
@@ -1162,7 +1165,7 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
                 (mState == ScrimState.PULSING || mState == ScrimState.AOD)
                 && mKeyguardOccluded;
         if (aodWallpaperTimeout || hideFlagShowWhenLockedActivities) {
-            mBehindAlpha = 1;
+            mBehindAlpha = mCustomScrimAlpha;
         }
         // Prevent notification scrim flicker when transitioning away from keyguard.
         if (mKeyguardStateController.isKeyguardGoingAway()) {
@@ -1454,7 +1457,7 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
     }
 
     private void blankDisplay() {
-        updateScrimColor(mScrimInFront, 1, Color.BLACK);
+        updateScrimColor(mScrimInFront, mCustomScrimAlpha, Color.BLACK);
 
         // Notify callback that the screen is completely black and we're
         // ready to change the display power mode
