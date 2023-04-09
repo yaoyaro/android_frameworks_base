@@ -11823,6 +11823,30 @@ public final class Settings {
         public static final String QS_TILE_SHAPE = "qs_tile_shape";
 
         /**
+         * Quicksettings columns
+         * @hide
+         */
+        public static final String QS_NUM_COLUMNS = "qs_num_columns";
+
+        /**
+         * Quicksettings columns landscape
+         * @hide
+         */
+        public static final String QS_NUM_COLUMNS_LANDSCAPE = "qs_num_columns_landscape";
+
+        /**
+         * Quick QS columns
+         * @hide
+         */
+        public static final String QQS_NUM_COLUMNS = "qqs_num_columns";
+
+        /**
+         * Quick QS columns landscape
+         * @hide
+         */
+        public static final String QQS_NUM_COLUMNS_LANDSCAPE = "qqs_num_columns_landscape";
+
+        /**
          * Helper method for determining if a location provider is enabled.
          *
          * @param cr the content resolver to use
