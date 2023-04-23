@@ -11942,6 +11942,12 @@ public final class Settings {
         }
 
         /**
+         * Brightness slider styles
+         * @hide
+         */
+        public static final String BRIGHTNESS_SLIDER_STYLE = "brightness_slider_style";
+
+        /**
          * Quicksettings UI Style
          * @hide
          */
