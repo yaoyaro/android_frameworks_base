@@ -11811,6 +11811,12 @@ public final class Settings {
         }
 
         /**
+         * Quicksettings UI Style
+         * @hide
+         */
+        public static final String QS_STYLE_ROUND = "qs_style_round";
+
+        /**
          * Quicksettings tile shape
          * @hide
          */
