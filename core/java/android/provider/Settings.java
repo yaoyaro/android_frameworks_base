@@ -11811,6 +11811,12 @@ public final class Settings {
         }
 
         /**
+         * Quicksettings tile shape
+         * @hide
+         */
+        public static final String QS_TILE_SHAPE = "qs_tile_shape";
+
+        /**
          * Helper method for determining if a location provider is enabled.
          *
          * @param cr the content resolver to use
