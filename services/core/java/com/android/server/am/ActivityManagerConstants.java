@@ -45,6 +45,7 @@ import android.util.ArraySet;
 import android.util.KeyValueListParser;
 import android.util.Slog;
 
+import com.android.internal.R;
 import com.android.internal.annotations.GuardedBy;
 
 import dalvik.annotation.optimization.NeverCompile;
@@ -1058,6 +1059,16 @@ final class ActivityManagerConstants extends ContentObserver {
     /** @see #KEY_USE_MODERN_TRIM */
     public boolean USE_MODERN_TRIM = DEFAULT_USE_MODERN_TRIM;
 
+    /**
+     * Indicates whether PSS profiling in AppProfiler is disabled or not.
+     */
+    static final String KEY_DISABLE_APP_PROFILER_PSS_PROFILING =
+            "disable_app_profiler_pss_profiling";
+
+    private final boolean mDefaultDisableAppProfilerPssProfiling;
+
+    public boolean APP_PROFILER_PSS_PROFILING_DISABLED;
+
     private final OnPropertiesChangedListener mOnDeviceConfigChangedListener =
             new OnPropertiesChangedListener() {
                 @Override
@@ -1236,6 +1247,9 @@ final class ActivityManagerConstants extends ContentObserver {
                             case KEY_USE_MODERN_TRIM:
                                 updateUseModernTrim();
                                 break;
+                            case KEY_DISABLE_APP_PROFILER_PSS_PROFILING:
+                                updateDisableAppProfilerPssProfiling();
+                                break;
                             default:
                                 updateFGSPermissionEnforcementFlagsIfNecessary(name);
                                 break;
@@ -1317,7 +1331,9 @@ final class ActivityManagerConstants extends ContentObserver {
         CUR_TRIM_EMPTY_PROCESSES = rawMaxEmptyProcesses / 2;
         CUR_TRIM_CACHED_PROCESSES = (Integer.min(CUR_MAX_CACHED_PROCESSES, MAX_CACHED_PROCESSES)
                     - rawMaxEmptyProcesses) / 3;
-
+        mDefaultDisableAppProfilerPssProfiling = context.getResources().getBoolean(
+                R.bool.config_am_disablePssProfiling);
+        APP_PROFILER_PSS_PROFILING_DISABLED = mDefaultDisableAppProfilerPssProfiling;
     }
 
     public void start(ContentResolver resolver) {
@@ -2015,7 +2031,13 @@ final class ActivityManagerConstants extends ContentObserver {
 
     private void updateFGSPermissionEnforcementFlagsIfNecessary(@NonNull String name) {
         ForegroundServiceTypePolicy.getDefaultPolicy()
-                .updatePermissionEnforcementFlagIfNecessary(name);
+            .updatePermissionEnforcementFlagIfNecessary(name);
+    }
+
+    private void updateDisableAppProfilerPssProfiling() {
+        APP_PROFILER_PSS_PROFILING_DISABLED = DeviceConfig.getBoolean(
+                DeviceConfig.NAMESPACE_ACTIVITY_MANAGER, KEY_DISABLE_APP_PROFILER_PSS_PROFILING,
+                mDefaultDisableAppProfilerPssProfiling);
     }
 
     @NeverCompile // Avoid size overhead of debugging code.
@@ -2206,6 +2228,9 @@ final class ActivityManagerConstants extends ContentObserver {
         pw.print("="); pw.println(USE_TIERED_CACHED_ADJ);
         pw.print("  "); pw.print(KEY_TIERED_CACHED_ADJ_DECAY_TIME);
         pw.print("="); pw.println(TIERED_CACHED_ADJ_DECAY_TIME);
+
+        pw.print("  "); pw.print(KEY_DISABLE_APP_PROFILER_PSS_PROFILING);
+        pw.print("="); pw.println(APP_PROFILER_PSS_PROFILING_DISABLED);
 
         pw.println();
         if (mOverrideMaxCachedProcesses >= 0) {

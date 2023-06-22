@@ -6599,4 +6599,7 @@
     <!-- List of protected packages that require biometric authentication for modification
          (Disable, force-stop or uninstalling updates). -->
     <string-array name="config_biometric_protected_package_names" translatable="false" />
+
+    <!-- Whether or not ActivityManager PSS profiling is disabled. -->
+    <bool name="config_am_disablePssProfiling">false</bool>
 </resources>
