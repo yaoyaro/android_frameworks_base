@@ -7924,4 +7924,9 @@ public class PackageManagerService implements PackageSender, TestUtilityService 
             }
         }
     }
+
+    @NonNull
+    public Context getContext() {
+        return mContext;
+    }
 }
