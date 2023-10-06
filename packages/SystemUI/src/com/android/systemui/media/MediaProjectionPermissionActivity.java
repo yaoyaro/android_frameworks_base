@@ -238,6 +238,8 @@ public class MediaProjectionPermissionActivity extends Activity
     protected void onDestroy() {
         super.onDestroy();
         if (mDialog != null) {
+            mDialog.setOnDismissListener(null);
+            mDialog.setOnCancelListener(null);
             mDialog.dismiss();
         }
     }
