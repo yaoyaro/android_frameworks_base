@@ -122,6 +122,7 @@ public class AmbientState implements Dumpable {
     private float mAppearFraction;
     private float mOverExpansion;
     private int mStackTopMargin;
+    private boolean mUseSplitShade;
 
     /** Distance of top of notifications panel from top of screen. */
     private float mStackY = 0;
@@ -226,6 +227,20 @@ public class AmbientState implements Dumpable {
             mIsFlingRequiredAfterLockScreenSwipeUp = false;
         }
         mIsFlinging = isFlinging;
+    }
+
+    /**
+     * @param useSplitShade True if we are showing split shade.
+     */
+    public void setUseSplitShade(boolean useSplitShade) {
+        mUseSplitShade = useSplitShade;
+    }
+
+    /**
+     * @return True if we are showing split shade.
+     */
+    public boolean getUseSplitShade() {
+        return mUseSplitShade;
     }
 
     /**
