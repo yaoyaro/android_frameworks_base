@@ -5858,6 +5858,11 @@ public final class Settings {
         public static final String SHOW_APP_VOLUME = "show_app_volume";
 
         /**
+         * @hide
+         */
+        public static final String ISLAND_NOTIFICATION = "island_notification";
+
+        /**
          * These are all public system settings
          *
          * @hide
