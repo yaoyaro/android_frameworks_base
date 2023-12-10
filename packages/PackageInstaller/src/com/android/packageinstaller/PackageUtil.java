@@ -31,6 +31,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.BadParcelableException;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -130,8 +131,12 @@ public class PackageUtil {
 
         private AppSnippet(Parcel in) {
             label = in.readString();
-            Bitmap bmp = in.readParcelable(getClass().getClassLoader(), Bitmap.class);
-            icon = new BitmapDrawable(Resources.getSystem(), bmp);
+            try {
+                Bitmap bmp = in.readParcelable(getClass().getClassLoader(), Bitmap.class);
+                icon = new BitmapDrawable(Resources.getSystem(), bmp);
+            } catch (BadParcelableException e) {
+                // normal, no icon
+            }
         }
 
         @Override
@@ -148,10 +153,14 @@ public class PackageUtil {
         public void writeToParcel(@NonNull Parcel dest, int flags) {
             dest.writeString(label.toString());
             Bitmap bmp = getBitmapFromDrawable(icon);
+            if (bmp == null || bmp.getByteCount() >= 1000000 /* 1 MB */) {
+                return;
+            }
             dest.writeParcelable(bmp, 0);
         }
 
         private Bitmap getBitmapFromDrawable(Drawable drawable) {
+            if (drawable == null) return null;
             int origW = drawable.getIntrinsicWidth();
             int origH = drawable.getIntrinsicHeight();
 
@@ -161,6 +170,7 @@ public class PackageUtil {
 
             int w = origW;
             int h = origH;
+            if (h == 0 || w == 0) return null;
             if (Math.max(origW, origH) > maxSide) {
                 double ratio = Math.min((double) maxSide / origW, (double) maxSide / origH);
                 w = (int) (ratio * w);
