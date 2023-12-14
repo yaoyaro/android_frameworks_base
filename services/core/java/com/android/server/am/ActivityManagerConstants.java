@@ -625,6 +625,10 @@ final class ActivityManagerConstants extends ContentObserver {
     // foreground service background start restriction.
     volatile boolean mFgsStartRestrictionNotificationEnabled = false;
 
+    // Indicates whether PSS profiling in AppProfiler is force-enabled, even if RSS is used by
+    // default. Controlled by Settings.Global.FORCE_ENABLE_PSS_PROFILING
+    volatile boolean mForceEnablePssProfiling = false;
+
     /**
      * Indicates whether the foreground service background start restriction is enabled for
      * caller app that is targeting S+.
@@ -953,6 +957,9 @@ final class ActivityManagerConstants extends ContentObserver {
 
     private static final Uri ENABLE_AUTOMATIC_SYSTEM_SERVER_HEAP_DUMPS_URI =
             Settings.Global.getUriFor(Settings.Global.ENABLE_AUTOMATIC_SYSTEM_SERVER_HEAP_DUMPS);
+
+    private static final Uri FORCE_ENABLE_PSS_PROFILING_URI =
+            Settings.Global.getUriFor(Settings.Global.FORCE_ENABLE_PSS_PROFILING);
 
     /**
      * The threshold to decide if a given association should be dumped into metrics.
@@ -1363,6 +1370,7 @@ final class ActivityManagerConstants extends ContentObserver {
             mResolver.registerContentObserver(ENABLE_AUTOMATIC_SYSTEM_SERVER_HEAP_DUMPS_URI,
                     false, this);
         }
+        mResolver.registerContentObserver(FORCE_ENABLE_PSS_PROFILING_URI, false, this);
         updateConstants();
         if (mSystemServerAutomaticHeapDumpEnabled) {
             updateEnableAutomaticSystemServerHeapDumps();
@@ -1378,6 +1386,7 @@ final class ActivityManagerConstants extends ContentObserver {
         // The following read from Settings.
         updateActivityStartsLoggingEnabled();
         updateForegroundServiceStartsLoggingEnabled();
+        updateForceEnablePssProfiling();
     }
 
     void loadDeviceConfigConstants() {
@@ -1412,6 +1421,8 @@ final class ActivityManagerConstants extends ContentObserver {
             updateForegroundServiceStartsLoggingEnabled();
         } else if (ENABLE_AUTOMATIC_SYSTEM_SERVER_HEAP_DUMPS_URI.equals(uri)) {
             updateEnableAutomaticSystemServerHeapDumps();
+        } else if (FORCE_ENABLE_PSS_PROFILING_URI.equals(uri)) {
+            updateForceEnablePssProfiling();
         }
     }
 
@@ -1530,6 +1541,11 @@ final class ActivityManagerConstants extends ContentObserver {
                         DeviceConfig.NAMESPACE_ACTIVITY_MANAGER,
                         KEY_DEFAULT_APPLICATION_START_INFO_ENABLED,
                         /*defaultValue*/ false);
+    }
+
+    private void updateForceEnablePssProfiling() {
+        mForceEnablePssProfiling = Settings.Global.getInt(mResolver,
+                Settings.Global.FORCE_ENABLE_PSS_PROFILING, 0) == 1;
     }
 
     private void updateBackgroundActivityStarts() {

@@ -142,7 +142,6 @@ import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.ServiceInfo;
 import android.net.NetworkPolicyManager;
-import android.os.Flags;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManagerInternal;
@@ -2765,7 +2764,7 @@ public class OomAdjuster {
                     // normally be a B service, but if we are low on RAM and it
                     // is large we want to force it down since we would prefer to
                     // keep launcher over it.
-                    long lastPssOrRss = !Flags.removeAppProfilerPssCollection()
+                    long lastPssOrRss = mService.mAppProfiler.isProfilingPss()
                             ? app.mProfile.getLastPss() : app.mProfile.getLastRss();
 
                     // RSS is larger than PSS, but the RSS/PSS ratio varies per-process based on how
@@ -2774,9 +2773,8 @@ public class OomAdjuster {
                     //
                     // TODO(b/296454553): Tune the second value so that the relative number of
                     // service B is similar before/after this flag is enabled.
-                    double thresholdModifier = !Flags.removeAppProfilerPssCollection()
-                            ? 1
-                            : mConstants.PSS_TO_RSS_THRESHOLD_MODIFIER;
+                    double thresholdModifier = mService.mAppProfiler.isProfilingPss()
+                            ? 1 : mConstants.PSS_TO_RSS_THRESHOLD_MODIFIER;
                     double cachedRestoreThreshold =
                             mProcessList.getCachedRestoreThresholdKb() * thresholdModifier;
 
