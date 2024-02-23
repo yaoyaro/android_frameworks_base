@@ -378,7 +378,7 @@ public class PackageInstallerActivity extends BasePackageInstallerActivity {
             final SessionInfo info = mInstaller.getSessionInfo(sessionId);
             String resolvedPath = info != null ? info.getResolvedBaseApkPath() : null;
             if (info == null || !info.isSealed() || resolvedPath == null) {
-                Log.w(TAG, "Session " + mSessionId + " in funky state; ignoring");
+                Log.w(TAG, "Session " + sessionId + " in funky state; ignoring");
                 finish();
                 return;
             }
@@ -393,7 +393,7 @@ public class PackageInstallerActivity extends BasePackageInstallerActivity {
                     -1 /* defaultValue */);
             final SessionInfo info = mInstaller.getSessionInfo(sessionId);
             if (info == null || !info.isPreApprovalRequested()) {
-                Log.w(TAG, "Session " + mSessionId + " in funky state; ignoring");
+                Log.w(TAG, "Session " + sessionId + " in funky state; ignoring");
                 finish();
                 return;
             }
@@ -804,7 +804,9 @@ public class PackageInstallerActivity extends BasePackageInstallerActivity {
                     // work for the multiple user case, i.e. the caller task user and started
                     // Activity user are not the same. To avoid having multiple PIAs in the task,
                     // finish the current PackageInstallerActivity
-                    finish();
+                    // Because finish() is overridden to set the installation result, we must use
+                    // the original finish() method, or the confirmation dialog fails to appear.
+                    PackageInstallerActivity.super.finish();
                 }
             }, 500);
 
