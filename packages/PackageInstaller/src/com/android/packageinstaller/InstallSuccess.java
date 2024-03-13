@@ -102,16 +102,17 @@ public class InstallSuccess extends BasePackageInstallerActivity {
         mInstallStatusIconView.setVisibility(View.VISIBLE);
 
         // Enable or disable "launch" button
-        boolean enabled = false;
+        boolean visible = false;
         if (mLaunchIntent != null) {
             List<ResolveInfo> list = getPackageManager().queryIntentActivities(mLaunchIntent,
                     0);
             if (list != null && list.size() > 0) {
-                enabled = true;
+                visible = true;
             }
         }
+        visible = visible && isLauncherActivityEnabled(mLaunchIntent);
 
-        if (enabled) {
+        if (visible) {
             mInstallBtn.setOnClickListener(view -> {
                 try {
                     startActivity(mLaunchIntent.addFlags(
@@ -124,5 +125,13 @@ public class InstallSuccess extends BasePackageInstallerActivity {
         } else {
             hideInstallBtn();
         }
+    }
+
+    private boolean isLauncherActivityEnabled(Intent intent) {
+        if (intent == null || intent.getComponent() == null) {
+            return false;
+        }
+        return getPackageManager().getComponentEnabledSetting(intent.getComponent())
+            != PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
     }
 }
