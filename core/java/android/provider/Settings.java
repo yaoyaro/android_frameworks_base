@@ -5890,6 +5890,13 @@ public final class Settings {
         public static final String SECURE_LOCKSCREEN_QS_DISABLED = "secure_lockscreen_qs_disabled";
 
         /**
+         * Whether to show rotation suggestion
+         * @hide
+         */
+        @Readable
+        public static final String ENABLE_ROTATION_BUTTON = "enable_rotation_button";
+
+        /**
          * These are all public system settings
          *
          * @hide
