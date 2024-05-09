@@ -442,8 +442,12 @@ public class CropView extends View {
                 upper = 1;
                 break;
         }
-        Log.i(TAG, "getAllowedValues: " + boundary + ", "
-                + "result=[lower=" + lower + ", upper=" + upper + "]");
+        if (lower >= upper) {
+            Log.wtf(TAG, "getAllowedValues computed an invalid range "
+                    + "[" + lower + ", " + upper + "]");
+            lower = Math.min(lower, upper);
+            upper = lower;
+        }
         return new Range<>(lower, upper);
     }
 
