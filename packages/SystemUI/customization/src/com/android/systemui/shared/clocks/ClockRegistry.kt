@@ -217,6 +217,7 @@ open class ClockRegistry(
                 manager: PluginLifecycleManager<ClockProviderPlugin>
             ) {
                 var isClockListChanged = false
+                plugin ?: return
                 for (clock in plugin.getClocks()) {
                     val id = clock.clockId
                     if (!isTransitClockEnabled && id == "DIGITAL_CLOCK_METRO") {
@@ -261,6 +262,7 @@ open class ClockRegistry(
                 plugin: ClockProviderPlugin,
                 manager: PluginLifecycleManager<ClockProviderPlugin>
             ) {
+                plugin ?: return
                 for (clock in plugin.getClocks()) {
                     val id = clock.clockId
                     val info = availableClocks[id]
