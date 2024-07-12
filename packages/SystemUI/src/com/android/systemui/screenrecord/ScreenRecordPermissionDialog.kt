@@ -57,6 +57,7 @@ class ScreenRecordPermissionDialog(
         R.drawable.ic_screenrecord,
         R.color.screenrecord_icon_color
     ) {
+    private val isHEVCAllowed: Boolean = controller.isHEVCAllowed()
     private lateinit var tapsSwitch: Switch
     private lateinit var tapsView: View
     private lateinit var audioSwitch: Switch
@@ -125,6 +126,11 @@ class ScreenRecordPermissionDialog(
             audioSwitch.isChecked = true
         }
 
+        if (!isHEVCAllowed) {
+            val hevcView: View = requireViewById(R.id.show_hevc)
+            hevcView.visibility = GONE
+        }
+
         val userContext = userContextProvider.userContext
         tapsSwitch.isChecked = Prefs.getInt(userContext, PREF_TAPS, 0) == 1
         stopDotSwitch.isChecked = Prefs.getInt(userContext, PREF_DOT, 0) == 1
@@ -133,7 +139,7 @@ class ScreenRecordPermissionDialog(
         audioSwitch.isChecked = Prefs.getInt(userContext, PREF_AUDIO, 0) == 1
         options.setSelection(Prefs.getInt(userContext, PREF_AUDIO_SOURCE, 0))
         skipTimeSwitch.isChecked = Prefs.getInt(userContext, PREF_SKIP, 0) == 1
-        hevcSwitch.isChecked = Prefs.getInt(userContext, PREF_HEVC, 1) == 1
+        hevcSwitch.isChecked = isHEVCAllowed && Prefs.getInt(userContext, PREF_HEVC, 1) == 1
     }
 
     override fun onItemSelected(adapterView: AdapterView<*>?, view: View, pos: Int, id: Long) {
@@ -160,7 +166,7 @@ class ScreenRecordPermissionDialog(
         val showStopDot = stopDotSwitch.isChecked
         val lowQuality = lowQualitySwitch.isChecked
         val longerDuration = longerDurationSwitch.isChecked
-        val hevc = hevcSwitch.isChecked
+        val hevc = isHEVCAllowed && hevcSwitch.isChecked
         val skipTime = skipTimeSwitch.isChecked
         val startIntent =
             PendingIntent.getForegroundService(
