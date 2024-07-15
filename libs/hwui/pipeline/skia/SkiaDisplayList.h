@@ -168,6 +168,7 @@ public:
     std::deque<RenderNodeDrawable> mChildNodes;
     std::deque<FunctorDrawable*> mChildFunctors;
     std::vector<SkImage*> mMutableImages;
+    std::vector<SkImage*> mMutableBitmapShaderImages;
     std::vector<const Mesh*> mMeshes;
 
 private:
