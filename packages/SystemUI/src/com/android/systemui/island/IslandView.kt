@@ -80,8 +80,7 @@ class IslandView : ExtendedFloatingActionButton {
     private var notifContent: String = ""
     private var notifSubContent: String = ""
     private var notifPackage: String = ""
-    
-    private var useIslandNotification = false
+
     private var isIslandAnimating = false
     private var isDismissed = true
     private var isTouchInsetsRemoved = true
@@ -121,10 +120,6 @@ class IslandView : ExtendedFloatingActionButton {
         vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
-    fun setIslandEnabled(enable: Boolean) {
-        this.useIslandNotification = enable
-    }
-
     fun setScroller(scroller: NotificationStackScrollLayout?) {
         this.notificationStackScroller = scroller
     }
@@ -142,7 +137,7 @@ class IslandView : ExtendedFloatingActionButton {
     }
 
     fun animateShowIsland(expandedFraction: Float) {
-        if (!useIslandNotification || expandedFraction > 0.0f) {
+        if (expandedFraction > 0.0f) {
             return
         }
         post({
@@ -196,7 +191,7 @@ class IslandView : ExtendedFloatingActionButton {
             notificationStackScroller?.visibility = View.VISIBLE
             this.visibility = View.GONE
             removeInsetsListener()
-        } else if (useIslandNotification && isIslandAnimating && expandedFraction == 0.0f) {
+        } else if (isIslandAnimating && expandedFraction == 0.0f) {
             notificationStackScroller?.visibility = View.GONE
             this.visibility = View.VISIBLE
             addInsetsListener()
