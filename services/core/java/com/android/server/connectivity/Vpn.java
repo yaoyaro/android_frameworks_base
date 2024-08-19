@@ -361,7 +361,11 @@ public class Vpn {
     private final AppOpsManager mAppOpsManager;
     private final ConnectivityDiagnosticsManager mConnectivityDiagnosticsManager;
     private final TelephonyManager mTelephonyManager;
+
+    // null if FEATURE_TELEPHONY_SUBSCRIPTION is not declared
+    @Nullable
     private final CarrierConfigManager mCarrierConfigManager;
+
     private final SubscriptionManager mSubscriptionManager;
 
     // The context is for specific user which is created from mUserId
@@ -3127,8 +3131,10 @@ public class Vpn {
                     createUserAndRestrictedProfilesRanges(mUserId,
                             mConfig.allowedApplications, mConfig.disallowedApplications));
 
-            mCarrierConfigManager.registerCarrierConfigChangeListener(mExecutor,
-                    mCarrierConfigChangeListener);
+            if (mCarrierConfigManager != null) {
+                mCarrierConfigManager.registerCarrierConfigChangeListener(mExecutor,
+                        mCarrierConfigChangeListener);
+            }
         }
 
         @Override
@@ -3626,6 +3632,10 @@ public class Vpn {
          */
         @Nullable
         private CarrierConfigInfo getCarrierConfigForUnderlyingNetwork() {
+            if (mCarrierConfigManager == null) {
+                return null;
+            }
+
             final int subId = getCellSubIdForNetworkCapabilities(mUnderlyingNetworkCapabilities);
             if (subId == SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
                 Log.d(TAG, "Underlying network is not a cellular network");
@@ -4227,8 +4237,10 @@ public class Vpn {
 
             resetIkeState();
 
-            mCarrierConfigManager.unregisterCarrierConfigChangeListener(
-                    mCarrierConfigChangeListener);
+            if (mCarrierConfigManager != null) {
+                mCarrierConfigManager.unregisterCarrierConfigChangeListener(
+                        mCarrierConfigChangeListener);
+            }
             mConnectivityManager.unregisterNetworkCallback(mNetworkCallback);
             clearVpnNetworkPreference(mSessionKey);
 
