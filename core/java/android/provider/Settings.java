@@ -5845,6 +5845,13 @@ public final class Settings {
         };
 
         /**
+         * Whether long press on navbar gesture is enabled
+         * @hide
+         */
+        @Readable
+        public static final String NAVBAR_LONG_PRESS_GESTURE = "navbar_long_press_gesture";
+
+        /**
          * These are all public system settings
          *
          * @hide
