@@ -1353,9 +1353,9 @@ public class ThermalManagerService extends SystemService {
         long mInactivityThresholdMillis = INACTIVITY_THRESHOLD_MILLIS;
 
         void updateSevereThresholds() {
-            synchronized (mSamples) {
-                List<TemperatureThreshold> thresholds =
+            List<TemperatureThreshold> thresholds =
                         mHalWrapper.getTemperatureThresholds(true, Temperature.TYPE_SKIN);
+            synchronized (mSamples) {
                 for (int t = 0; t < thresholds.size(); ++t) {
                     TemperatureThreshold threshold = thresholds.get(t);
                     if (threshold.hotThrottlingThresholds.length <= ThrottlingSeverity.SEVERE) {
