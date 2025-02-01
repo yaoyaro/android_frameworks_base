@@ -1392,15 +1392,19 @@ public final class SystemServer implements Dumpable {
         mSystemServiceManager.startService(CachedDeviceStateService.class);
         t.traceEnd();
 
-        // Tracks cpu time spent in binder calls
-        t.traceBegin("StartBinderCallsStatsService");
-        mSystemServiceManager.startService(BinderCallsStatsService.LifeCycle.class);
-        t.traceEnd();
+        if (Build.IS_ENG) {
+            // Tracks cpu time spent in binder calls
+            t.traceBegin("StartBinderCallsStatsService");
+            mSystemServiceManager.startService(BinderCallsStatsService.LifeCycle.class);
+            t.traceEnd();
+        }
 
-        // Tracks time spent in handling messages in handlers.
-        t.traceBegin("StartLooperStatsService");
-        mSystemServiceManager.startService(LooperStatsService.Lifecycle.class);
-        t.traceEnd();
+        if (Build.IS_ENG) {
+            // Tracks time spent in handling messages in handlers.
+            t.traceBegin("StartLooperStatsService");
+            mSystemServiceManager.startService(LooperStatsService.Lifecycle.class);
+            t.traceEnd();
+        }
 
         // Manages apk rollbacks.
         t.traceBegin("StartRollbackManagerService");
@@ -1412,10 +1416,12 @@ public final class SystemServer implements Dumpable {
         mSystemServiceManager.startService(NativeTombstoneManagerService.class);
         t.traceEnd();
 
-        // Service to capture bugreports.
-        t.traceBegin("StartBugreportManagerService");
-        mSystemServiceManager.startService(BugreportManagerService.class);
-        t.traceEnd();
+        if (Build.IS_ENG) {
+            // Service to capture bugreports.
+            t.traceBegin("StartBugreportManagerService");
+            mSystemServiceManager.startService(BugreportManagerService.class);
+            t.traceEnd();
+        }
 
         // Service for GPU and GPU driver.
         t.traceBegin("GpuService");
@@ -2366,13 +2372,15 @@ public final class SystemServer implements Dumpable {
                 t.traceEnd();
             }
 
-            t.traceBegin("StartDiskStatsService");
-            try {
-                ServiceManager.addService("diskstats", new DiskStatsService(context));
-            } catch (Throwable e) {
-                reportWtf("starting DiskStats Service", e);
-            }
-            t.traceEnd();
+            //if (Build.IS_ENG) {
+                t.traceBegin("StartDiskStatsService");
+                try {
+                    ServiceManager.addService("diskstats", new DiskStatsService(context));
+                } catch (Throwable e) {
+                    reportWtf("starting DiskStats Service", e);
+                }
+                t.traceEnd();
+            //}
 
             t.traceBegin("RuntimeService");
             try {
@@ -2417,10 +2425,12 @@ public final class SystemServer implements Dumpable {
             mSystemServiceManager.startService(DreamManagerService.class);
             t.traceEnd();
 
-            t.traceBegin("AddGraphicsStatsService");
-            ServiceManager.addService(GraphicsStatsService.GRAPHICS_STATS_SERVICE,
-                    new GraphicsStatsService(context));
-            t.traceEnd();
+            if (Build.IS_ENG) {
+                t.traceBegin("AddGraphicsStatsService");
+                ServiceManager.addService(GraphicsStatsService.GRAPHICS_STATS_SERVICE,
+                        new GraphicsStatsService(context));
+                t.traceEnd();
+            }
 
             if (CoverageService.ENABLED) {
                 t.traceBegin("AddCoverageService");
@@ -2631,12 +2641,13 @@ public final class SystemServer implements Dumpable {
             t.traceEnd();
         }
 
-        // Statsd helper
-        t.traceBegin("StartStatsCompanion");
-        mSystemServiceManager.startServiceFromJar(
-                STATS_COMPANION_LIFECYCLE_CLASS, STATS_COMPANION_APEX_PATH);
-        t.traceEnd();
-
+        //if (Build.IS_ENG) {
+            // Statsd helper
+            t.traceBegin("StartStatsCompanion");
+            mSystemServiceManager.startServiceFromJar(
+                    STATS_COMPANION_LIFECYCLE_CLASS, STATS_COMPANION_APEX_PATH);
+            t.traceEnd();
+        //}
         // Reboot Readiness
         t.traceBegin("StartRebootReadinessManagerService");
         mSystemServiceManager.startServiceFromJar(
@@ -2724,11 +2735,12 @@ public final class SystemServer implements Dumpable {
         t.traceBegin("AppServiceManager");
         mSystemServiceManager.startService(AppBindingService.Lifecycle.class);
         t.traceEnd();
-
-        // Perfetto TracingServiceProxy
-        t.traceBegin("startTracingServiceProxy");
-        mSystemServiceManager.startService(TracingServiceProxy.class);
-        t.traceEnd();
+        if (Build.IS_ENG) {
+            // Perfetto TracingServiceProxy
+            t.traceBegin("startTracingServiceProxy");
+            mSystemServiceManager.startService(TracingServiceProxy.class);
+            t.traceEnd();
+        }
 
         // Lineage Services
         String externalServer = context.getResources().getString(
@@ -3188,11 +3200,13 @@ public final class SystemServer implements Dumpable {
                 t.traceEnd();
             }
 
+            if (Build.IS_ENG) {
             t.traceBegin("OdsignStatsLogger");
             try {
                 OdsignStatsLogger.triggerStatsWrite();
             } catch (Throwable e) {
                 reportWtf("Triggering OdsignStatsLogger", e);
+            }
             }
             t.traceEnd();
 
