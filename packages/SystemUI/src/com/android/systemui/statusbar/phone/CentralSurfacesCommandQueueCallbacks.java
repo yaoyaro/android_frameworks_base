@@ -105,7 +105,7 @@ public class CentralSurfacesCommandQueueCallbacks implements CommandQueue.Callba
     private final DisableFlagsLogger mDisableFlagsLogger;
     private final int mDisplayId;
     private final UserTracker mUserTracker;
-    private final boolean mVibrateOnOpening;
+    private final boolean mVibrateOnOpening = false;
     private final VibrationEffect mCameraLaunchGestureVibrationEffect;
     private final SystemBarAttributesListener mSystemBarAttributesListener;
     private final ActivityStarter mActivityStarter;
@@ -180,7 +180,6 @@ public class CentralSurfacesCommandQueueCallbacks implements CommandQueue.Callba
         mQSHost = qsHost;
         mFeatureFlags = featureFlags;
 
-        mVibrateOnOpening = resources.getBoolean(R.bool.config_vibrateOnIconAnimation);
         mCameraLaunchGestureVibrationEffect = getCameraGestureVibrationEffect(
                 mVibratorOptional, resources);
         mSystemBarAttributesListener = systemBarAttributesListener;
