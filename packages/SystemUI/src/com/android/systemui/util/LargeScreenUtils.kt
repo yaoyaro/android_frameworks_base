@@ -2,6 +2,7 @@ package com.android.systemui.util
 
 import android.content.res.Resources
 import com.android.systemui.R
+import com.android.systemui.util.qs.QSStyleUtils.isForceLargeHeader
 
 object LargeScreenUtils {
 
@@ -21,6 +22,6 @@ object LargeScreenUtils {
      */
     @JvmStatic
     fun shouldUseLargeScreenShadeHeader(resources: Resources): Boolean {
-        return resources.getBoolean(R.bool.config_use_large_screen_shade_header)
+        return (resources.getBoolean(R.bool.config_use_large_screen_shade_header) || isForceLargeHeader())
     }
 }

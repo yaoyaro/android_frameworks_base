@@ -22,9 +22,11 @@ import com.android.systemui.R;
 
 public class QSStyleUtils {
     public static final String QS_STYLE_ROUND = Settings.Secure.QS_STYLE_ROUND;
+    public static final String QS_FORCE_LARGE_HEADER = Settings.Secure.QS_FORCE_LARGE_HEADER;
     public static final String QS_STYLE_ROUND_OVERLAY = "com.android.systemui.qs_style.round";
 
     private static boolean mIsRoundQS;
+    private static boolean mIsForceLargeHeader;
 
     public static void setRoundQS(boolean enable) {
         mIsRoundQS = enable;
@@ -37,5 +39,18 @@ public class QSStyleUtils {
     public static boolean isRoundQSSetting(Context context) {
         return Settings.Secure.getIntForUser(context.getContentResolver(),
                 QS_STYLE_ROUND, 1, UserHandle.USER_CURRENT) == 1;
+    }
+
+    public static void setForceLargeHeader(boolean enable) {
+        mIsForceLargeHeader = enable;
+    }
+
+    public static boolean isForceLargeHeader() {
+        return mIsForceLargeHeader;
+    }
+
+    public static boolean isForceLargeHeaderSetting(Context context) {
+        return Settings.Secure.getIntForUser(context.getContentResolver(),
+                QS_FORCE_LARGE_HEADER, 0, UserHandle.USER_CURRENT) == 1;
     }
 }

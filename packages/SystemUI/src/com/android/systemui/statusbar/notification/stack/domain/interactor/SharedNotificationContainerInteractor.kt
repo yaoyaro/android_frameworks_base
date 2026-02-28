@@ -20,6 +20,7 @@ package com.android.systemui.statusbar.notification.stack.domain.interactor
 import android.content.Context
 import com.android.systemui.R
 import com.android.systemui.common.ui.data.repository.ConfigurationRepository
+import com.android.systemui.util.qs.QSStyleUtils.isForceLargeHeader
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -41,7 +42,7 @@ constructor(
                     ConfigurationBasedDimensions(
                         useSplitShade = getBoolean(R.bool.config_use_split_notification_shade),
                         useLargeScreenHeader =
-                            getBoolean(R.bool.config_use_large_screen_shade_header),
+                            (getBoolean(R.bool.config_use_large_screen_shade_header) || isForceLargeHeader()),
                         marginHorizontal =
                             getDimensionPixelSize(R.dimen.notification_panel_margin_horizontal),
                         marginBottom =

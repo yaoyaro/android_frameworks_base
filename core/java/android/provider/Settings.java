@@ -11860,6 +11860,12 @@ public final class Settings {
         public static final String QQS_NUM_COLUMNS_LANDSCAPE = "qqs_num_columns_landscape";
 
         /**
+         * Quicksettings forced large screen shade header
+         * @hide
+         */
+        public static final String QS_FORCE_LARGE_HEADER = "qs_force_large_header";
+
+        /**
          * Helper method for determining if a location provider is enabled.
          *
          * @param cr the content resolver to use
