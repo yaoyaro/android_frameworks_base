@@ -323,6 +323,7 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
             // Setting text actually triggers a layout pass (because the text view is set to
             // wrap_content width and TextView always relayouts for this). Avoid needless
             // relayout if the text didn't actually change.
+            boolean mCharging = isCharging();
             if (!TextUtils.equals(mBatteryPercentView.getText(), percentText) || mPCharging != mCharging) {
                 mPCharging = mCharging;
                 // Use the high voltage symbol ⚡ (u26A1 unicode) but prevent the system
