@@ -66,7 +66,6 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Debug;
-import android.os.Flags;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -749,8 +748,7 @@ public class AppProfiler {
     }
 
     boolean isProfilingPss() {
-        return !Flags.removeAppProfilerPssCollection()
-                || mService.mConstants.mForceEnablePssProfiling;
+        return mService.mConstants.mForceEnablePssProfiling;
     }
 
     // This method is analogous to collectPssInBackground() and is intended to be used as a
