@@ -6605,5 +6605,5 @@
     <string-array name="config_biometric_protected_package_names" translatable="false" />
 
     <!-- Whether or not ActivityManager PSS profiling is disabled. -->
-    <bool name="config_am_disablePssProfiling">false</bool>
+    <bool name="config_am_disablePssProfiling">true</bool>
 </resources>
