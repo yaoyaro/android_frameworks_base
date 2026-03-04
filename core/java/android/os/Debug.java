@@ -1957,7 +1957,6 @@ public final class Debug
     /**
      * Retrieves the RSS memory used by the process as given by the status file.
      */
-    @FlaggedApi(Flags.FLAG_REMOVE_APP_PROFILER_PSS_COLLECTION)
     public static native long getRss();
 
     /**
@@ -1968,7 +1967,6 @@ public final class Debug
      * @return The RSS memory usage, or 0 if retrieval failed (i.e. the PID is gone).
      * @hide
      */
-    @FlaggedApi(Flags.FLAG_REMOVE_APP_PROFILER_PSS_COLLECTION)
     public static native long getRss(int pid, long[] outMemtrack);
 
     /** @hide */
