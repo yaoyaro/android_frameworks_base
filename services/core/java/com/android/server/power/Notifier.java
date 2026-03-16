@@ -183,6 +183,8 @@ public class Notifier {
     private int mBroadcastedInteractiveState;
     private boolean mBroadcastInProgress;
     private long mBroadcastStartTime;
+    private static final long USER_ACTIVITY_MIN_INTERVAL_MS = 500;
+    private long mLastUserActivityTimeMs;
 
     // True if a user activity message should be sent.
     private boolean mUserActivityPending;
@@ -690,6 +692,12 @@ public class Notifier {
             Slog.d(TAG, "onUserActivity: event=" + event + ", uid=" + uid);
         }
 
+	// axion start - throttle noteUserActivity
+        final long now = SystemClock.uptimeMillis();
+        if (now - mLastUserActivityTimeMs >= USER_ACTIVITY_MIN_INTERVAL_MS) {
+            mLastUserActivityTimeMs = now;
+	// axion end
+
         try {
             mBatteryStats.noteUserActivity(uid, event);
         } catch (RemoteException ex) {
@@ -706,6 +714,7 @@ public class Notifier {
                 mHandler.sendMessage(msg);
             }
         }
+        } // axion
     }
 
     /**
