@@ -57,6 +57,7 @@ public final class AttestationHooks {
     private static final boolean DEBUG = false;
 
     private static final String AVB_STATE = "ro.boot.verifiedbootstate";
+    private static final String TOGGLE = "persist.log.tag.IdenTism";
 
     private static final PrivateKey EC, RSA;
     private static final byte[] EC_CERTS;
@@ -212,6 +213,9 @@ public final class AttestationHooks {
          * response if we see it.
          */
         if (SystemProperties.get(AVB_STATE, "").equals("yellow"))
+            return response;
+
+        if (!SystemProperties.get(TOGGLE, "").equals("I"))
             return response;
 
         if (response.metadata == null)
