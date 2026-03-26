@@ -47,7 +47,7 @@ import java.util.HashMap;
  */
 public class SmsNumberUtils {
     private static final String TAG = "SmsNumberUtils";
-    private static final boolean DBG = SystemProperties.getInt("ro.debuggable", 0) == 1;
+    private static final boolean DBG = false;
 
     private static final String PLUS_SIGN = "+";
 

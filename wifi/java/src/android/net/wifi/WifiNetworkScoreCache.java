@@ -43,7 +43,7 @@ import java.util.Objects;
  */
 public class WifiNetworkScoreCache extends INetworkScoreCache.Stub {
     private static final String TAG = "WifiNetworkScoreCache";
-    private static final boolean DBG = Log.isLoggable(TAG, Log.DEBUG);
+    private static final boolean DBG = false;
 
     // A Network scorer returns a score in the range [-128, +127]
     // We treat the lowest possible score as though there were no score, effectively allowing the
