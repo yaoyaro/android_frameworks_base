@@ -943,11 +943,9 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
                 new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onDoubleTap(MotionEvent e) {
-                mView.getHandler().postDelayed(() -> {
-                    if (mPowerManager != null) {
-                        mPowerManager.goToSleep(e.getEventTime());
-                    }
-                }, 100);
+                if (mPowerManager != null) {
+                    mPowerManager.goToSleep(e.getEventTime());
+                }
                 return true;
             }
         });
