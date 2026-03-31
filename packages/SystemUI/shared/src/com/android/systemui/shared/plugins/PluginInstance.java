@@ -277,11 +277,13 @@ public class PluginInstance<T extends Plugin> implements PluginLifecycleManager 
         /** Returns class loader specific for the given plugin. */
         private ClassLoader getClassLoader(ApplicationInfo appInfo,
                 ClassLoader baseClassLoader) {
+            /*
             if (!mIsDebug && !isPluginPackagePrivileged(appInfo.packageName)) {
                 Log.w(TAG, "Cannot get class loader for non-privileged plugin. Src:"
                         + appInfo.sourceDir + ", pkg: " + appInfo.packageName);
                 return null;
             }
+            */
 
             List<String> zipPaths = new ArrayList<>();
             List<String> libPaths = new ArrayList<>();
