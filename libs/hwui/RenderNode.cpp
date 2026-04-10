@@ -20,6 +20,7 @@
 #include "Debug.h"
 #include "Properties.h"
 #include "TreeInfo.h"
+#include "utils/FrameTraceUtils.h"
 #include "VectorDrawable.h"
 #include "private/hwui/WebViewFunctor.h"
 #ifdef __ANDROID__
@@ -125,7 +126,7 @@ int RenderNode::getAllocatedSize() {
 
 
 void RenderNode::prepareTree(TreeInfo& info) {
-    ATRACE_CALL();
+    HWUI_FRAME_ATRACE_CALL();
     LOG_ALWAYS_FATAL_IF(!info.damageAccumulator, "DamageAccumulator missing");
     MarkAndSweepRemoved observer(&info);
 

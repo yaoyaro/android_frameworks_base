@@ -48,6 +48,7 @@
 #include "thread/CommonPool.h"
 #include "tools/SkSharingProc.h"
 #include "utils/Color.h"
+#include "utils/FrameTraceUtils.h"
 #include "utils/String8.h"
 
 using namespace android::uirenderer::renderthread;
@@ -95,7 +96,7 @@ void SkiaPipeline::renderLayers(const LightGeometry& lightGeometry,
                                 LayerUpdateQueue* layerUpdateQueue, bool opaque,
                                 const LightInfo& lightInfo) {
     LightingInfo::updateLighting(lightGeometry, lightInfo);
-    ATRACE_NAME("draw layers");
+    HWUI_FRAME_ATRACE_NAME("draw layers");
     renderLayersImpl(*layerUpdateQueue, opaque);
     layerUpdateQueue->clear();
 }
@@ -143,7 +144,7 @@ void SkiaPipeline::renderLayersImpl(const LayerUpdateQueue& layers, bool opaque)
             return;
         }
 
-        ATRACE_FORMAT("drawLayer [%s] %.1f x %.1f", layerNode->getName(), bounds.width(),
+        HWUI_FRAME_ATRACE_FORMAT("drawLayer [%s] %.1f x %.1f", layerNode->getName(), bounds.width(),
                       bounds.height());
 
         layerNode->getSkiaLayer()->hasRenderedSinceRepaint = false;
@@ -161,7 +162,7 @@ void SkiaPipeline::renderLayersImpl(const LayerUpdateQueue& layers, bool opaque)
             GrAsDirectContext(layerNode->getLayerSurface()->getCanvas()->recordingContext());
         if (cachedContext.get() != currentContext) {
             if (cachedContext.get()) {
-                ATRACE_NAME("flush layers (context changed)");
+                HWUI_FRAME_ATRACE_NAME("flush layers (context changed)");
                 cachedContext->flushAndSubmit();
             }
             cachedContext.reset(SkSafeRef(currentContext));
@@ -169,7 +170,7 @@ void SkiaPipeline::renderLayersImpl(const LayerUpdateQueue& layers, bool opaque)
     }
 
     if (cachedContext.get()) {
-        ATRACE_NAME("flush layers");
+        HWUI_FRAME_ATRACE_NAME("flush layers");
         cachedContext->flushAndSubmit();
     }
 }

@@ -90,6 +90,8 @@ bool Properties::isHighEndGfx = true;
 bool Properties::isLowRam = false;
 bool Properties::isSystemOrPersistent = false;
 
+bool Properties::traceEachFrame = false;
+
 float Properties::maxHdrHeadroomOn8bit = 5.f;  // TODO: Refine this number
 
 StretchEffectBehavior Properties::stretchEffectBehavior = StretchEffectBehavior::ShaderHWUI;
@@ -158,6 +160,8 @@ bool Properties::load() {
 
     // call isDrawingEnabled to force loading of the property
     isDrawingEnabled();
+
+    traceEachFrame = base::GetBoolProperty(PROPERTY_TRACE_EACH_FRAME, false);
 
     return (prevDebugLayersUpdates != debugLayersUpdates) || (prevDebugOverdraw != debugOverdraw);
 }

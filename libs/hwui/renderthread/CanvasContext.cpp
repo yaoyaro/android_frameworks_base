@@ -29,6 +29,7 @@
 #include <functional>
 
 #include "../Properties.h"
+#include "../utils/FrameTraceUtils.h"
 #include "AnimationContext.h"
 #include "Frame.h"
 #include "LayerUpdateQueue.h"
@@ -396,7 +397,7 @@ bool CanvasContext::isSwapChainStuffed() {
     }
 
     // All signs point to a stuffed swap chain
-    ATRACE_NAME("swap chain stuffed");
+    HWUI_FRAME_ATRACE_NAME("swap chain stuffed");
     return true;
 }
 
@@ -586,7 +587,7 @@ void CanvasContext::draw(bool solelyTextureViewUpdates) {
 
     SkRect windowDirty = computeDirtyRect(frame, &dirty);
 
-    ATRACE_FORMAT("Drawing " RECT_STRING, SK_RECT_ARGS(dirty));
+    HWUI_FRAME_ATRACE_FORMAT("Drawing " RECT_STRING, SK_RECT_ARGS(dirty));
 
     IRenderPipeline::DrawResult drawResult;
     {

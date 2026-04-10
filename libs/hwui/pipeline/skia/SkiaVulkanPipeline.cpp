@@ -34,6 +34,7 @@
 #include "VkInteropFunctorDrawable.h"
 #include "renderstate/RenderState.h"
 #include "renderthread/Frame.h"
+#include "utils/FrameTraceUtils.h"
 #include "renderthread/IRenderPipeline.h"
 
 using namespace android::uirenderer::renderthread;
@@ -112,7 +113,7 @@ IRenderPipeline::DrawResult SkiaVulkanPipeline::draw(
 
     nsecs_t submissionTime = IRenderPipeline::DrawResult::kUnknownTime;
     {
-        ATRACE_NAME("flush commands");
+        HWUI_FRAME_ATRACE_NAME("flush commands");
         submissionTime = vulkanManager().finishFrame(backBuffer.get());
     }
     layerUpdateQueue->clear();

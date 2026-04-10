@@ -243,6 +243,8 @@ enum class StretchEffectBehavior {
 
 enum class DrawingEnabled { NotInitialized, On, Off };
 
+#define PROPERTY_TRACE_EACH_FRAME "debug.hwui.trace_each_frame"
+
 /**
  * Renderthread-only singleton which manages several static rendering properties. Most of these
  * are driven by system properties which are queried once at initialization, and again if init()
@@ -322,6 +324,8 @@ public:
     static bool isHighEndGfx;
     static bool isLowRam;
     static bool isSystemOrPersistent;
+
+    static bool traceEachFrame;
 
     static float maxHdrHeadroomOn8bit;
 
