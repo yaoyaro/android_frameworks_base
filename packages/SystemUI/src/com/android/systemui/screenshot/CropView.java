@@ -254,7 +254,6 @@ public class CropView extends View {
             return;
         }
 
-        Log.i(TAG, "setBoundaryPosition: " + boundary + ", position=" + position);
         position = (float) getAllowedValues(boundary).clamp(position);
         switch (boundary) {
             case TOP:
@@ -283,7 +282,6 @@ public class CropView extends View {
                 Log.w(TAG, "No boundary selected");
                 break;
         }
-        Log.i(TAG,  "Updated mCrop: " + mCrop);
 
         invalidate();
     }
