@@ -167,6 +167,8 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
     private boolean mIslandNowPlayingEnabled;
     private NotificationUtils notifUtils;
 
+    private int lstState;
+
     private final MediaController.Callback mMediaListener = new MediaController.Callback() {
         @Override
         public void onPlaybackStateChanged(PlaybackState state) {
@@ -180,11 +182,18 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
                         && !mStatusBarStateController.isDozing() 
                         && PlaybackState.STATE_PLAYING == getMediaControllerPlaybackState(mMediaController) 
                         && mMediaMetadata != null) {
-                        notifUtils.showNowPlayingNotification(mMediaMetadata);
+                        switch (lstState) {
+                        case PlaybackState.STATE_NONE:
+                        case PlaybackState.STATE_STOPPED:
+                        case PlaybackState.STATE_PAUSED:
+                            notifUtils.showNowPlayingNotification(mMediaMetadata);
+                            break;
+                        }
                     } else {
                         notifUtils.cancelNowPlayingNotification();
                     }
                 }
+                lstState = getMediaControllerPlaybackState(mMediaController);
                 if (!isPlaybackActive(state.getState())) {
                     clearCurrentMediaNotification();
                 }
