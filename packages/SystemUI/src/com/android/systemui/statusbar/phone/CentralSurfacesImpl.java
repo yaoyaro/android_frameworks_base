@@ -298,7 +298,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
     private static final String FORCE_SHOW_NAVBAR =
             "lineagesystem:" + LineageSettings.System.FORCE_SHOW_NAVBAR;
     private static final String QS_TRANSPARENCY =
-            "system:" + Settings.System.QS_TRANSPARENCY;
+            Settings.Secure.QS_TRANSPARENCY;
 
     private static final int MSG_OPEN_SETTINGS_PANEL = 1002;
     private static final int MSG_LAUNCH_TRANSITION_TIMEOUT = 1003;
