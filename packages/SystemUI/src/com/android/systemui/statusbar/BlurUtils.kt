@@ -43,7 +43,7 @@ open class BlurUtils @Inject constructor(
     dumpManager: DumpManager
 ) : Dumpable {
     val minBlurRadius = resources.getDimensionPixelSize(R.dimen.min_window_blur_radius)
-    val maxBlurRadius = resources.getDimensionPixelSize(R.dimen.max_window_blur_radius)
+    val maxBlurRadius = resources.getDimensionPixelSize(R.dimen.max_shade_window_blur_radius)
     private var lastAppliedBlur = 0
     private var earlyWakeupEnabled = false
 
